@@ -30,22 +30,12 @@ const getElements = driver => {
                     .then(name => console.log(name))
                 ))
         })
-}
-
-
-const finishPageParse = driver => {
-    driver.quit()
+        .then(() => driver.quit())
 }
 
 const handleError = (error) => {
     console.log('HandleError: ', error)
 }
-
-// getData(letlive_urls[0])
-//     .then(getElements)
-//     .then(handleElements)
-//     .then(finishPageParse)
-//     .catch(handleError)
 
 letlive_urls.map(link => {
     getData(link)
