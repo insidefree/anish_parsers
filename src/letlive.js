@@ -8,6 +8,46 @@ let letlive_urls = [
     'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=2'
 ]
 
+const URL_BASE = 'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged='
+
+function fetchLinks() {
+    let driver = new webdriver.Builder()
+        .forBrowser('chrome')
+        .build();
+    let urls = []
+    let page = 1
+    let elem = true
+    while (page <2) {
+        driver.get(URL_BASE + page)
+        setTimeout(() => {
+            driver.findElements(By.css(".pet-details"))
+                .then(elem => {elem.length ? urls.push(URL_BASE + page) : elem = false})
+                .then(() => driver.quit())
+        }, 15000)
+        page++
+    }
+
+    urls.map(el => console.log(el))
+    // return new Promise((resolve, reject) => {
+
+    // })
+    // console.log('call getPage');
+
+    // driver.get(url + page);
+    // driver.findElements(By.css(".pet-details")).then(function (petDets) {
+    //     console.log(petDets.length);
+    //     if (!petDets.length) {
+    //         console.log('no such page');
+    //         return;
+    //     }
+
+    //     getPetDetails(petDets);
+    //     page++;
+    // });
+}
+
+fetchLinks()
+
 const getData = link => {
     let driver = new webdriver.Builder()
         .forBrowser('chrome')
@@ -47,8 +87,8 @@ const handleError = (error) => {
     console.log('HandleError: ', error)
 }
 
-letlive_urls.map(link => {
-    getData(link)
-        .then(getElements)
-        .catch(handleError)
-})
+// letlive_urls.map(link => {
+//     getData(link)
+//         .then(getElements)
+//         .catch(handleError)
+// })
