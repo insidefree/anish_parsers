@@ -25,10 +25,20 @@ const getElements = driver => {
     let pendingElements = driver.findElements(By.css(".pet-details"))
     pendingElements
         .then(elements => {
-            elements.map(elem => elem.findElement(By.css('h3 a'))
-                .then(name => name.getText()
-                    .then(name => console.log(name))
-                ))
+            elements.map(elem => {
+                elem.findElement(By.css('h3 a'))
+                    .then(name => name.getText()
+                        .then(name => console.log(name))
+                    )
+                elem.findElement(By.css('.pet-details-age'))
+                    .then(age => age.getText()
+                        .then(age => console.log(age))
+                    )
+                elem.findElement(By.css('img'))
+                    .then(img => img.getAttribute('src')
+                        .then(img => console.log(img))
+                    )
+            })
         })
         .then(() => driver.quit())
 }
