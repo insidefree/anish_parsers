@@ -22,10 +22,6 @@ const getData = link => {
 }
 
 const getElements = driver => {
-    return driver
-}
-
-const handleElements = driver => {
     let pendingElements = driver.findElements(By.css(".pet-details"))
     pendingElements
         .then(elements => {
@@ -35,6 +31,7 @@ const handleElements = driver => {
                 ))
         })
 }
+
 
 const finishPageParse = driver => {
     driver.quit()
@@ -53,6 +50,5 @@ const handleError = (error) => {
 letlive_urls.map(link => {
     getData(link)
         .then(getElements)
-        .then(handleElements)
         .catch(handleError)
 })
