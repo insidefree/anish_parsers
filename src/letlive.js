@@ -27,9 +27,6 @@ const getElements = driver => {
 
 const handleElements = driver => {
     let pendingElements = driver.findElements(By.css(".pet-details"))
-    let finish = new Promise((resolve, reject) => {
-        resolve
-    })
     pendingElements
         .then(elements => {
             elements.map(elem => elem.findElement(By.css('h3 a'))
