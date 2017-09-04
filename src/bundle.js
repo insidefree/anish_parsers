@@ -21226,8 +21226,10 @@ var driver = new webdriver.Builder()
     .forBrowser('chrome')
     .build();
 // ask the browser to open a page
-driver.navigate().to('http://path.to.test.app/');
-driver.quit();
+driver.navigate().to('http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=1');
+driver.findElements(webdriver.By.css(".pet-details"))
+    .then(function (elem) { return console.log(elem); });
+setTimeout(function () { return driver.quit(); }, 15000);
 
 
 /***/ }),
