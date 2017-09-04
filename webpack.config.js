@@ -1,19 +1,28 @@
-const path = require('path')
-const webpack = require('webpack')
-
-
 module.exports = {
-  entry: './src/App.js',
+  entry: "./src/letlive_ts.ts",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: './bundle.js'
+    filename: "./dist/bundle.js",
   },
+
+  // Enable sourcemaps for debugging webpack's output.
+  devtool: "source-map",
+
   resolve: {
-    extensions: ['*', '.webpack.js', '.web.js', '.ts', '.js']
+    // Add '.ts' and '.tsx' as resolvable extensions.
+    extensions: ["*", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
   },
+
   module: {
     loaders: [
-      { test: /.ts$/, loader: 'awesome-typescript-loader' }
+      // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
+      { test: /\.tsx?$/, loader: "awesome-typescript-loader" }
+    ],
+
+    preLoaders: [
+      // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
+      { test: /\.js$/, loader: "source-map-loader" }
     ]
-  }
-};
+  },
+
+  // Other options...
+}
