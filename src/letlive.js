@@ -5,8 +5,8 @@ var webdriver = require('selenium-webdriver'),
 
 let letlive_urls = [
     'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=1',
-    'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=2',
-    'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=3'
+    'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=2'
+
 ]
 // const URL_BASE = 'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged='
 
@@ -40,14 +40,15 @@ const handleElem = elem => {
     let e3 = elem.findElement(By.css('img'))
         .then(img => { return img.getAttribute('src') })
 
-    promise.all([e1, e2, e3])
-        .then(values => {
-            let obj = {}
-            obj.name = values[0]
-            obj.age = values[1]
-            obj.image = values[2]
-            console.log(obj)
-        })
+    return [e1, e2, e3]
+    // promise.all([e1, e2, e3])
+    //     .then(values => {
+    //         let obj = {}
+    //         obj.name = values[0]
+    //         obj.age = values[1]
+    //         obj.image = values[2]
+    //         console.log(obj)
+    //     })
 
 }
 
@@ -71,9 +72,11 @@ const getElements = driver => {
             //         )
 
             //     })
-
-            elements.map(elem => handleElem(elem))
+            let all_promises = []
+            elements.map(elem => all_promises.push(handleElem(elem)))
+            return all_promises
         })
+        .then(all_promises => { for (p in all_promises) { console.log(p) } })
         .then(() => driver.quit())
 }
 
@@ -93,17 +96,17 @@ function* driverGenerator(link, getData, getElements, handleError) {
     yield getData(link)
         .then(getElements)
         .catch(handleError)
-    
+
     console.log('finish yield')
 }
 
 
-for (let link of letlive_urls) {
-    for (let res of driverGenerator(link, getData, getElements, handleError)) {
-        console.log(res)
-    }
+// for (let link of letlive_urls) {
+//     for (let res of driverGenerator(link, getData, getElements, handleError)) {
+//         console.log(res)
+//     }
 
-}
+// }
 
 
 // ********** EXAMPLE
@@ -117,3 +120,13 @@ for (let link of letlive_urls) {
 // for (let num of range(1, 10)) {
 //     console.log(num)
 // }
+
+// async function add2AsyncThings() {
+//     try {
+//       await getData();
+      
+//     } catch(e) {
+//       // rejected promise from either function is caught here
+//     }
+// }
+// add2AsyncThings()

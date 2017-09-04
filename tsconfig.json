@@ -1,12 +1,17 @@
 {
     "compilerOptions": {
-        "outDir": "./built",
-        "allowJs": true,
+        "outDir": "./built/bundle.js",
         "target": "es5",
-        "module": "commonjs"
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "sourceMap": false,
+        "declaration": false,
+        "removeComments": false,
+        "noImplicitAny": false,
+        "types": ["jasmine", "node"]
     },
     "include": [
-        // "./src/**/*"
+        
     ],
     "exclude": [
         "node_modules"
