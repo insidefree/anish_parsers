@@ -1,7 +1,9 @@
-require('chromedriver')
-var promise = require('selenium-webdriver').promise
-var webdriver = require('selenium-webdriver'),
-    By = webdriver.By;
+import * as CD from 'chromedriver'
+import { promise } from 'selenium-webdriver'
+// var promise = require('selenium-webdriver').promise
+import { webdriver } from 'selenium-webdriver'
+// var webdriver = require('selenium-webdriver'),
+let By = webdriver.By;
 
 let letlive_urls = [
     'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=1',
@@ -93,7 +95,7 @@ function* driverGenerator(link, getData, getElements, handleError) {
     yield getData(link)
         .then(getElements)
         .catch(handleError)
-    
+
     console.log('finish yield')
 }
 
