@@ -8,11 +8,17 @@
         "declaration": false,
         "removeComments": false,
         "noImplicitAny": false,
-        "types": ["jasmine", "node"]
+        "types": [
+            "node",
+            "jasmine",
+            "core-js"
+        ],
+        "lib": [
+            "es2015.promise",
+            "dom"
+        ]
     },
-    "include": [
-        
-    ],
+    "include": [],
     "exclude": [
         "node_modules"
     ]
