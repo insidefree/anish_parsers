@@ -1,5 +1,5 @@
 module.exports = {
-  entry: './src/letlive2.ts',
+  entry: './src/App.ts',
   target: 'node',
   output: {
     filename: './dist/bundle.js'
