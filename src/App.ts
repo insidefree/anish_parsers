@@ -1,5 +1,9 @@
-import { SiteNameLetlive } from './Parser'
+import { SiteParserLetlive } from './Parser'
 
-let sp = new SiteNameLetlive('bench')
+let sp: SiteParserLetlive
+sp = new SiteParserLetlive('bench')
+
 
 sp.toString()
+sp.commonFuncTEST()
+

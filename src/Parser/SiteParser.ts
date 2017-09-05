@@ -1,13 +1,15 @@
-interface SiteParserInterface {
-    siteName: string
-}
+import { SiteParserInterface, CommonFuncTESTInterface } from './interfaces'
 
-export default class SiteParser {
-    constructor(private siteName: string) {
 
+export default abstract class SiteParser implements SiteParserInterface {
+    public siteName: string
+    constructor(siteName: string) {
+        this.siteName = siteName
     }
 
-    public toString(): void {
-        console.log(`${this.siteName}`)
-    }
+    abstract getData(link: string): void
+
+    abstract toString(): void
+
+    abstract commonFuncTEST(val): CommonFuncTESTInterface
 }
