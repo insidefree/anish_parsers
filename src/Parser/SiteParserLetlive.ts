@@ -1,11 +1,12 @@
 import SiteParser from './SiteParser'
+import { SiteParserInterface, CommonFuncTESTInterface } from './interfaces'
 
 export default class SiteParserLetLive extends SiteParser {
     constructor(siteName) {
         super(siteName)
     }
 
-    getData(link) {
+    getData(link: string) {
 
     }
 
@@ -13,8 +14,9 @@ export default class SiteParserLetLive extends SiteParser {
         console.log(`${this.siteName}`)
     }
 
-    commonFuncTEST(val) {
-        val = { name: "", age: 13 }
-        return val
+    commonFuncTEST(val: string) {
+        let obj = { name: "", age: 13 }
+        obj.name = val
+        return obj
     }
 }

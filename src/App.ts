@@ -5,5 +5,4 @@ sp = new SiteParserLetlive('bench')
 
 
 sp.toString()
-sp.commonFuncTEST()
 
