@@ -80,7 +80,7 @@ function dramaticWelcome() {
                     _a.label = 1;
                 case 1:
                     if (!(i < 5)) return [3 /*break*/, 4];
-                    return [4 /*yield*/, delay(1000, i)];
+                    return [4 /*yield*/, delay(2000, i)];
                 case 2:
                     count = _a.sent();
                     console.log(count);

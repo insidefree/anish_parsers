@@ -9,16 +9,18 @@
         "removeComments": false,
         "noImplicitAny": false,
         "types": [
-            "node",
-            "jasmine",
-            "core-js"
+            "node"
         ],
         "lib": [
-            "es2015.promise",
-            "dom"
+            "dom",
+            "dom.iterable",
+            "es2015",
+            "scripthost"
         ]
     },
-    "include": [],
+    "include": [
+        "./**/*"
+    ],
     "exclude": [
         "node_modules"
     ]
