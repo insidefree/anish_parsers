@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "clean": "rimraf dist",
+    "build": "webpack --watch --progress --colors",
+    "prestart": "npm run build",
+    "start": "webpack"
   },
   "keywords": [],
   "author": "",

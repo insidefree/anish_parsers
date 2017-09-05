@@ -51,4 +51,8 @@ async function dramaticWelcome(): Promise<void> {
     console.log("World!");
 }
 
+function BENCH():void{
+    
+}
+
 dramaticWelcome();

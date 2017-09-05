@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "outDir": "./built/bundle.js",
+        "outDir": "./dist/bundle.js",
         "target": "es5",
         "module": "commonjs",
         "moduleResolution": "node",
@@ -13,9 +13,7 @@
         ],
         "lib": [
             "dom",
-            "dom.iterable",
-            "es2015",
-            "scripthost"
+            "es2015"
         ]
     },
     "include": [
