@@ -11,5 +11,5 @@ export default abstract class SiteParser implements SiteParserInterface {
 
     abstract toString(): void
 
-    abstract commonFuncTEST(val): CommonFuncTESTInterface
+    abstract commonFuncTEST(val: string): CommonFuncTESTInterface
 }
