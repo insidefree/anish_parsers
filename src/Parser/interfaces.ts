@@ -5,6 +5,11 @@ export interface CommonFuncTESTInterface {
 
 export interface SiteParserInterface {
     siteName: string
+    pageCount: number
+    readonly driver: any
+    readonly By: any
+    readonly promise: any
+    fetchData: () => void
     getData: (link: string) => void
     toString: () => void
     commonFuncTEST: (val: string) => CommonFuncTESTInterface

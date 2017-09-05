@@ -56,25 +56,25 @@ const getElements = driver => {
     let pendingElements = driver.findElements(By.css(".pet-details"))
     pendingElements
         .then(elements => {
-            // elements.map(elem => {
-            //     let obj = {}
-            //     elem.findElement(By.css('h3 a'))
-            //         .then(name => name.getText()
-            //             .then(name => obj.name = name)
-            //         )
-            //     elem.findElement(By.css('.pet-details-age'))
-            //         .then(age => age.getText()
-            //             .then(age => console.log(age))
-            //         )
-            //     elem.findElement(By.css('img'))
-            //         .then(img => img.getAttribute('src')
-            //             .then(img => console.log(img))
-            //         )
+            elements.map(elem => {
+                let obj = {}
+                elem.findElement(By.css('h3 a'))
+                    .then(name => name.getText()
+                        .then(name => obj.name = name)
+                    )
+                elem.findElement(By.css('.pet-details-age'))
+                    .then(age => age.getText()
+                        .then(age => console.log(age))
+                    )
+                elem.findElement(By.css('img'))
+                    .then(img => img.getAttribute('src')
+                        .then(img => console.log(img))
+                    )
 
-            //     })
-            let all_promises = []
-            elements.map(elem => all_promises.push(handleElem(elem)))
-            return all_promises
+                })
+            // let all_promises = []
+            // elements.map(elem => all_promises.push(handleElem(elem)))
+            // return all_promises
         })
         .then(all_promises => { for (p in all_promises) { console.log(p) } })
         .then(() => driver.quit())
@@ -84,21 +84,21 @@ const handleError = (error) => {
     console.log('HandleError: ', error)
 }
 
-// letlive_urls.map(link => {
-//     getData(link)
-//         .then(getElements)
-//         .catch(handleError)
-// })
-
-function* driverGenerator(link, getData, getElements, handleError) {
-    console.log('start')
-    console.log('start yield')
-    yield getData(link)
+letlive_urls.map(link => {
+    getData(link)
         .then(getElements)
         .catch(handleError)
+})
 
-    console.log('finish yield')
-}
+// function* driverGenerator(link, getData, getElements, handleError) {
+//     console.log('start')
+//     console.log('start yield')
+//     yield getData(link)
+//         .then(getElements)
+//         .catch(handleError)
+
+//     console.log('finish yield')
+// }
 
 
 // for (let link of letlive_urls) {
