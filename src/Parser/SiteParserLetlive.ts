@@ -7,6 +7,46 @@ export default class SiteParserLetLive extends SiteParser {
         super(siteName, pageCount)
     }
 
+    start() {
+        const BASE_LINK = 'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged='
+        let pageNumber = 1
+
+        // for (let promise of this.range(1,5)) {
+
+        // }
+        this.generator(3)
+
+
+    }
+
+    *generator(count:number): IterableIterator<number> {
+        while(true){
+            yield count++;
+            console.log(count)
+        }
+    }
+    async *g() {
+        yield 1;
+        await setTimeout(function() {
+            
+        }, 2000);;
+        yield* [2, 3];
+      }  
+
+    async f() {
+        async function* g() {
+            yield 1;
+            await setTimeout(function() {
+                
+            }, 2000);;
+            yield* [2, 3];
+          }
+        console.log('aaaaee')
+        for await (const x of g()) {
+           console.log(x);
+        }
+      }
+
     async fetchData() {
 
         // function delay(milliseconds: number, count: number): Promise<number> {
@@ -49,11 +89,38 @@ export default class SiteParserLetLive extends SiteParser {
         //     }
 
         // }
+
+
         console.log('start')
         await this.getData('http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=1')
             .then(this.getElements)
             .catch(this.handleError)
+
+
         console.log('end')
+    }
+
+    *range(start, end) {
+        let current = start
+        while (current <= end) {
+            yield current++
+        }
+    }
+
+
+    *driverGenerator(link, pageNumber) {
+        let page = 1
+        while (page < pageNumber) {
+            console.log('start')
+            console.log('start yield')
+            yield this.getData(link + page)
+                .then(this.getElements)
+                .catch(this.handleError)
+
+            console.log('finish yield')
+            page++
+        }
+
     }
 
     getData(link: string) {
@@ -73,7 +140,7 @@ export default class SiteParserLetLive extends SiteParser {
             .then(img => { return img.getAttribute('src') })
 
         // return [e1, e2, e3]
-        
+
         this.promise.all([e1, e2, e3])
             .then(values => {
                 let obj: any = {}
@@ -110,7 +177,7 @@ export default class SiteParserLetLive extends SiteParser {
                 return all_promises
             })
             .then(() => driver.quit())
-            console.log('quit')
+        console.log('quit')
     }
 
     handleError = (error) => {
