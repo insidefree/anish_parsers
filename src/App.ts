@@ -2,7 +2,7 @@ import { SiteParserLetlive } from './Parser'
 
 
 
-let sp: SiteParserLetlive = new SiteParserLetlive('bench', 18)
+let sp: SiteParserLetlive = new SiteParserLetlive('bench')
 
 
 sp.start()

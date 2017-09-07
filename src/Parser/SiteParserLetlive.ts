@@ -3,24 +3,32 @@ import { SiteParserInterface, CommonFuncTESTInterface } from './interfaces'
 import 'core-js/shim'
 import "core-js/modules/es7.symbol.async-iterator"
 
+const webdriver = require('selenium-webdriver')
+const driver = new webdriver.Builder()
+    .forBrowser('chrome')
+    .build();
+const By = webdriver.By
+const promise = webdriver.promise
+
 export default class SiteParserLetLive extends SiteParser {
-    constructor(siteName, pageCount) {
-        super(siteName, pageCount)
+    constructor(siteName) {
+        super(siteName)
     }
 
     start() {
         const BASE_LINK = 'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged='
         let pageNumber = 1
-
+        
         console.log('start1')
         this.main()
     }
+    
     async *foo() {
         yield "wait...";
         await new Promise(r => setTimeout(r, 2000));
         yield new Promise(r => setTimeout(() => r("okay!"), 1000));
     }
-    
+
     async main() {
         for await (let item of this.foo()) {
             let result = await item;
@@ -38,29 +46,6 @@ export default class SiteParserLetLive extends SiteParser {
 
         console.log('end')
     }
-
-    // *range(start, end) {
-    //     let current = start
-    //     while (current <= end) {
-    //         yield current++
-    //     }
-    // }
-
-
-    // *driverGenerator(link, pageNumber) {
-    //     let page = 1
-    //     while (page < pageNumber) {
-    //         console.log('start')
-    //         console.log('start yield')
-    //         yield this.getData(link + page)
-    //             .then(this.getElements)
-    //             .catch(this.handleError)
-
-    //         console.log('finish yield')
-    //         page++
-    //     }
-
-    // }
 
     getData(link: string) {
         return new Promise((resolve, reject) => {

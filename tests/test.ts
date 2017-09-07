@@ -1,9 +1,9 @@
-import { Animal, Snake, Horse } from './test2'
+// import { Animal, Snake, Horse } from './test2'
 
-console.log('test')
+// console.log('test')
 
-let sam = new Snake("Sammy the Python");
-let tom: Animal = new Horse("Tommy the Palomino");
+// let sam = new Snake("Sammy the Python");
+// let tom: Animal = new Horse("Tommy the Palomino");
 
-sam.move();
-tom.move(34);
+// sam.move();
+// tom.move(34);
