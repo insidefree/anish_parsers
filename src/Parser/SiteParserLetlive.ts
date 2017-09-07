@@ -1,6 +1,7 @@
 import SiteParser from './SiteParser'
 import { SiteParserInterface, CommonFuncTESTInterface } from './interfaces'
-
+import 'core-js/shim'
+import "core-js/modules/es7.symbol.async-iterator"
 
 export default class SiteParserLetLive extends SiteParser {
     constructor(siteName, pageCount) {
@@ -11,86 +12,24 @@ export default class SiteParserLetLive extends SiteParser {
         const BASE_LINK = 'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged='
         let pageNumber = 1
 
-        // for (let promise of this.range(1,5)) {
-
-        // }
-        this.generator(3)
-
-
+        console.log('start1')
+        this.main()
     }
-
-    *generator(count:number): IterableIterator<number> {
-        while(true){
-            yield count++;
-            console.log(count)
+    async *foo() {
+        yield "wait...";
+        await new Promise(r => setTimeout(r, 2000));
+        yield new Promise(r => setTimeout(() => r("okay!"), 1000));
+    }
+    
+    async main() {
+        for await (let item of this.foo()) {
+            let result = await item;
+            console.log(result);
         }
     }
-    async *g() {
-        yield 1;
-        await setTimeout(function() {
-            
-        }, 2000);;
-        yield* [2, 3];
-      }  
 
-    async f() {
-        async function* g() {
-            yield 1;
-            await setTimeout(function() {
-                
-            }, 2000);;
-            yield* [2, 3];
-          }
-        console.log('aaaaee')
-        for await (const x of g()) {
-           console.log(x);
-        }
-      }
 
     async fetchData() {
-
-        // function delay(milliseconds: number, count: number): Promise<number> {
-        //     return new Promise<number>(resolve => {
-        //         setTimeout(() => {
-        //             resolve(count);
-        //         }, milliseconds);
-        //     });
-        // }
-        // // async function always return a Promise
-        // async function dramaticWelcome(): Promise<void> {
-        //     console.log("Hello");
-
-        //     for (let i = 0; i < 5; i++) {
-        //         // await is converting Promise<number> into number
-        //         const count: number = await delay(2000, i);
-        //         console.log(count);
-        //     }
-
-        //     console.log("World!");
-        // }
-
-        // dramaticWelcome();
-
-
-        // function* driverGenerator(link, getData, getElements, handleError) {
-        //     console.log('start')
-        //     console.log('start yield')
-        //     yield getData(link)
-        //         .then(getElements)
-        //         .catch(handleError)
-
-        //     console.log('finish yield')
-        // }
-
-
-        // for (let link of letlive_urls) {
-        //     for (let res of driverGenerator(link, getData, getElements, handleError)) {
-        //         console.log(res)
-        //     }
-
-        // }
-
-
         console.log('start')
         await this.getData('http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=1')
             .then(this.getElements)
@@ -100,28 +39,28 @@ export default class SiteParserLetLive extends SiteParser {
         console.log('end')
     }
 
-    *range(start, end) {
-        let current = start
-        while (current <= end) {
-            yield current++
-        }
-    }
+    // *range(start, end) {
+    //     let current = start
+    //     while (current <= end) {
+    //         yield current++
+    //     }
+    // }
 
 
-    *driverGenerator(link, pageNumber) {
-        let page = 1
-        while (page < pageNumber) {
-            console.log('start')
-            console.log('start yield')
-            yield this.getData(link + page)
-                .then(this.getElements)
-                .catch(this.handleError)
+    // *driverGenerator(link, pageNumber) {
+    //     let page = 1
+    //     while (page < pageNumber) {
+    //         console.log('start')
+    //         console.log('start yield')
+    //         yield this.getData(link + page)
+    //             .then(this.getElements)
+    //             .catch(this.handleError)
 
-            console.log('finish yield')
-            page++
-        }
+    //         console.log('finish yield')
+    //         page++
+    //     }
 
-    }
+    // }
 
     getData(link: string) {
         return new Promise((resolve, reject) => {
