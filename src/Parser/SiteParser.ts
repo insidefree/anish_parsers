@@ -4,11 +4,9 @@ const webdriver = require('selenium-webdriver')
 // const By = webdriver.By
 // const promise = webdriver.promise
 
-
 export default abstract class SiteParser implements SiteParserInterface {
     public siteName: string
     public pageCount: number
-    public BASE_URL: string
     readonly driver: any
     readonly By: any
     readonly promise: any
@@ -22,7 +20,7 @@ export default abstract class SiteParser implements SiteParserInterface {
         this.promise = webdriver.promise
     }
 
-    abstract fetchData(pageCount: number):  AsyncIterableIterator<any>
+    abstract fetchData(): void
 
     abstract getData(link: string): void
 
