@@ -3,12 +3,12 @@ import { SiteParserInterface, CommonFuncTESTInterface } from './interfaces'
 import 'core-js/shim'
 import "core-js/modules/es7.symbol.async-iterator"
 
-const webdriver = require('selenium-webdriver')
-const driver = new webdriver.Builder()
-    .forBrowser('chrome')
-    .build();
-const By = webdriver.By
-const promise = webdriver.promise
+// const webdriver = require('selenium-webdriver')
+// const driver = new webdriver.Builder()
+//     .forBrowser('chrome')
+// .build();
+// const By = webdriver.By
+// const promise = webdriver.promise
 
 export default class SiteParserLetLive extends SiteParser {
     constructor(siteName) {
@@ -18,40 +18,44 @@ export default class SiteParserLetLive extends SiteParser {
     start() {
         const BASE_LINK = 'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged='
         let pageNumber = 1
-        
+
         console.log('start1')
         this.main()
     }
-    
+
     async *foo() {
-        yield "wait...";
-        await new Promise(r => setTimeout(r, 2000));
-        yield new Promise(r => setTimeout(() => r("okay!"), 1000));
+        yield "wait..."
+        await new Promise(r => setTimeout(r, 2000))
+        yield new Promise(r => setTimeout(() => r('okay!'), 2000))
     }
 
     async main() {
         for await (let item of this.foo()) {
-            let result = await item;
-            console.log(result);
+            let result = await item
+            console.log(result)
         }
     }
 
-
     async fetchData() {
-        console.log('start')
-        await this.getData('http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=1')
-            .then(this.getElements)
-            .catch(this.handleError)
-
-
+        console.log('start fetch')
+        // for await (let driver of this.getData('http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=1')) {
+        //     console.log(driver)
+        //     // driver
+        //     //     .then(this.getElements)
+        //     //     .catch(this.handleError)
+        //     console.log('end driver')
+        // }
         console.log('end')
     }
 
-    getData(link: string) {
-        return new Promise((resolve, reject) => {
-            this.driver.get(link)
-            setTimeout(() => resolve(this.driver), 10000)
-        })
+    async getData(link: string) {
+        console.log('getData start')
+        let readyDriver = await new Promise(r  => setTimeout(() => r(this.driver), 10000))
+        // yield await new Promise(r => setTimeout(() => r(this.getElements(readyDriver)), 1000))
+        // new Promise((resolve, reject) => {
+        //     this.driver.get(link)
+        //     setTimeout(() => resolve(this.driver), 10000)
+        // })
     }
 
     handleElem = elem => {
@@ -76,8 +80,9 @@ export default class SiteParserLetLive extends SiteParser {
 
     }
 
-    getElements = driver => {
-        let pendingElements = driver.findElements(this.By.css(".pet-details"))
+    getElements = (readyDriver) => {
+        console.log('getElements **')
+        let pendingElements = readyDriver.findElements(this.By.css(".pet-details"))
         pendingElements
             .then(elements => {
                 // elements.map(elem => {
@@ -100,7 +105,7 @@ export default class SiteParserLetLive extends SiteParser {
                 elements.map(elem => all_promises.push(this.handleElem(elem)))
                 return all_promises
             })
-            .then(() => driver.quit())
+            .then(() => readyDriver.quit())
         console.log('quit')
     }
 
