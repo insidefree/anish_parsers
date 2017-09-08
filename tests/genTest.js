@@ -52,19 +52,18 @@ var __asyncValues = (this && this.__asyncIterator) || function (o) {
     return m ? m.call(o) : typeof __values === "function" ? __values(o) : o[Symbol.iterator]();
 };
 exports.__esModule = true;
+require("core-js/shim");
+require("core-js/modules/es7.symbol.async-iterator");
 var webdriver = require('selenium-webdriver');
 var By = webdriver.By;
 var promise = webdriver.promise;
 var driver = new webdriver.Builder()
     .forBrowser('chrome')
     .build();
-// console.log(driver)
 var BASE_URL = 'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=';
-require("core-js/shim");
-require("core-js/modules/es7.symbol.async-iterator");
 function foo(pageCount) {
     return __asyncGenerator(this, arguments, function foo_1() {
-        var page, temp, _a, _b;
+        var page, _a, _b;
         return __generator(this, function (_c) {
             switch (_c.label) {
                 case 0:
@@ -79,8 +78,7 @@ function foo(pageCount) {
                     return [4 /*yield*/, __await(getElements)];
                 case 2: return [4 /*yield*/, __await.apply(void 0, [_b.apply(_a, [_c.sent()])])];
                 case 3:
-                    temp = _c.sent();
-                    console.log("Temp: " + temp);
+                    _c.sent();
                     console.log('end getData');
                     console.log('page++');
                     page++;
@@ -94,45 +92,39 @@ function foo(pageCount) {
 }
 function main() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, item, result, e_1_1, e_1, _c;
+        var _a, _b, item, e_1_1, e_1, _c;
         return __generator(this, function (_d) {
             switch (_d.label) {
                 case 0:
-                    _d.trys.push([0, 7, 8, 13]);
+                    _d.trys.push([0, 6, 7, 12]);
                     _a = __asyncValues(foo(3));
                     _d.label = 1;
                 case 1: return [4 /*yield*/, _a.next()];
                 case 2:
-                    if (!(_b = _d.sent(), !_b.done)) return [3 /*break*/, 6];
+                    if (!(_b = _d.sent(), !_b.done)) return [3 /*break*/, 5];
                     return [4 /*yield*/, _b.value];
                 case 3:
                     item = _d.sent();
-                    return [4 /*yield*/, item
-                        // result.get()
-                        // console.log(result)
-                    ];
-                case 4:
-                    result = _d.sent();
-                    _d.label = 5;
-                case 5: return [3 /*break*/, 1];
-                case 6: return [3 /*break*/, 13];
-                case 7:
+                    _d.label = 4;
+                case 4: return [3 /*break*/, 1];
+                case 5: return [3 /*break*/, 12];
+                case 6:
                     e_1_1 = _d.sent();
                     e_1 = { error: e_1_1 };
-                    return [3 /*break*/, 13];
-                case 8:
-                    _d.trys.push([8, , 11, 12]);
-                    if (!(_b && !_b.done && (_c = _a["return"]))) return [3 /*break*/, 10];
+                    return [3 /*break*/, 12];
+                case 7:
+                    _d.trys.push([7, , 10, 11]);
+                    if (!(_b && !_b.done && (_c = _a["return"]))) return [3 /*break*/, 9];
                     return [4 /*yield*/, _c.call(_a)];
-                case 9:
+                case 8:
                     _d.sent();
-                    _d.label = 10;
-                case 10: return [3 /*break*/, 12];
-                case 11:
+                    _d.label = 9;
+                case 9: return [3 /*break*/, 11];
+                case 10:
                     if (e_1) throw e_1.error;
                     return [7 /*endfinally*/];
-                case 12: return [7 /*endfinally*/];
-                case 13: return [2 /*return*/];
+                case 11: return [7 /*endfinally*/];
+                case 12: return [2 /*return*/];
             }
         });
     });
@@ -151,6 +143,23 @@ function getElTest() {
         });
     });
 }
+var handleElem = function (elem) {
+    var obj = {};
+    var e1 = elem.findElement(By.css('h3 a'))
+        .then(function (name) { return name.getText(); });
+    var e2 = elem.findElement(By.css('.pet-details-age'))
+        .then(function (age) { return age.getText(); });
+    var e3 = elem.findElement(By.css('img'))
+        .then(function (img) { return img.getAttribute('src'); });
+    promise.all([e1, e2, e3])
+        .then(function (values) {
+        var obj = {};
+        obj.name = values[0];
+        obj.age = values[1];
+        obj.image = values[2];
+        console.log(obj);
+    });
+};
 function getElements() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -159,21 +168,23 @@ function getElements() {
                     var pendingElements = driver.findElements(By.css(".pet-details"));
                     pendingElements
                         .then(function (elements) {
-                        elements.map(function (elem) {
-                            var obj = {};
-                            elem.findElement(By.css('h3 a'))
-                                .then(function (name) { return name.getText()
-                                .then(function (name) { return console.log(name); }); });
-                            elem.findElement(By.css('.pet-details-age'))
-                                .then(function (age) { return age.getText()
-                                .then(function (age) { return console.log(age); }); });
-                            elem.findElement(By.css('img'))
-                                .then(function (img) { return img.getAttribute('src')
-                                .then(function (img) { return console.log(img); }); });
-                        });
-                        // let all_promises = []
-                        // elements.map(elem => all_promises.push(this.handleElem(elem)))
-                        // return all_promises
+                        // elements.map(elem => {
+                        //     let obj = {}
+                        //     elem.findElement(By.css('h3 a'))
+                        //         .then(name => name.getText()
+                        //             .then(name => console.log(name))
+                        //         )
+                        //     elem.findElement(By.css('.pet-details-age'))
+                        //         .then(age => age.getText()
+                        //             .then(age => console.log(age))
+                        //         )
+                        //     elem.findElement(By.css('img'))
+                        //         .then(img => img.getAttribute('src')
+                        //             .then(img => console.log(img))
+                        //         )
+                        // })
+                        var all_promises = [];
+                        elements.map(function (elem) { return all_promises.push(handleElem(elem)); });
                     })
                         .then(function () { return resolve(); });
                     console.log('quit');
