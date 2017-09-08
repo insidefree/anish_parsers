@@ -36,16 +36,18 @@ async function* foo(pageCount) {
         console.log(`start get ${page}`)
         driver.get(BASE_URL + page)
         console.log('start getData')
-        await getData()
-            // .then(getElements)
+        let temp = await getData()
+            .then(await getElements)
+        console.log(`Temp: ${temp}`)
         console.log('end getData')
         console.log('page++')
         page++
     }
+    driver.quit()
 }
 
 async function main() {
-    for await (let item of foo(5)) {
+    for await (let item of foo(3)) {
         let result = await item
         // result.get()
         // console.log(result)
@@ -53,13 +55,18 @@ async function main() {
 }
 
 const getData = () => {
-    
     return new Promise(resolve => {
         setTimeout(() => resolve(driver), 10000)
     })
 }
 
-async function getElements () {
+async function getElTest() {
+    return new Promise(res => {
+        setTimeout(() => res('getElTest'), 2000)
+    })
+}
+
+async function getElements() {
     return new Promise(resolve => {
         console.log('getElements **')
         let pendingElements = driver.findElements(By.css(".pet-details"))
@@ -79,16 +86,17 @@ async function getElements () {
                         .then(img => img.getAttribute('src')
                             .then(img => console.log(img))
                         )
-    
+
                 })
                 // let all_promises = []
                 // elements.map(elem => all_promises.push(this.handleElem(elem)))
                 // return all_promises
             })
-            .then(() => driver.quit())
+            // .then(() => driver.quit())
+            .then(() => resolve())
         console.log('quit')
     })
-    
+
 }
 
 main()

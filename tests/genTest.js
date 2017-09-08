@@ -64,28 +64,30 @@ require("core-js/shim");
 require("core-js/modules/es7.symbol.async-iterator");
 function foo(pageCount) {
     return __asyncGenerator(this, arguments, function foo_1() {
-        var page;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
+        var page, temp, _a, _b;
+        return __generator(this, function (_c) {
+            switch (_c.label) {
                 case 0:
                     page = 1;
-                    _a.label = 1;
+                    _c.label = 1;
                 case 1:
-                    if (!(page < pageCount)) return [3 /*break*/, 3];
+                    if (!(page < pageCount)) return [3 /*break*/, 4];
                     console.log("start get " + page);
                     driver.get(BASE_URL + page);
                     console.log('start getData');
-                    return [4 /*yield*/, __await(getData()
-                        // .then(getElements)
-                        )];
-                case 2:
-                    _a.sent();
-                    // .then(getElements)
+                    _b = (_a = getData()).then;
+                    return [4 /*yield*/, __await(getElements)];
+                case 2: return [4 /*yield*/, __await.apply(void 0, [_b.apply(_a, [_c.sent()])])];
+                case 3:
+                    temp = _c.sent();
+                    console.log("Temp: " + temp);
                     console.log('end getData');
                     console.log('page++');
                     page++;
                     return [3 /*break*/, 1];
-                case 3: return [2 /*return*/];
+                case 4:
+                    driver.quit();
+                    return [2 /*return*/];
             }
         });
     });
@@ -97,7 +99,7 @@ function main() {
             switch (_d.label) {
                 case 0:
                     _d.trys.push([0, 7, 8, 13]);
-                    _a = __asyncValues(foo(5));
+                    _a = __asyncValues(foo(3));
                     _d.label = 1;
                 case 1: return [4 /*yield*/, _a.next()];
                 case 2:
@@ -140,6 +142,15 @@ var getData = function () {
         setTimeout(function () { return resolve(driver); }, 10000);
     });
 };
+function getElTest() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2 /*return*/, new Promise(function (res) {
+                    setTimeout(function () { return res('getElTest'); }, 2000);
+                })];
+        });
+    });
+}
 function getElements() {
     return __awaiter(this, void 0, void 0, function () {
         return __generator(this, function (_a) {
@@ -164,7 +175,7 @@ function getElements() {
                         // elements.map(elem => all_promises.push(this.handleElem(elem)))
                         // return all_promises
                     })
-                        .then(function () { return driver.quit(); });
+                        .then(function () { return resolve(); });
                     console.log('quit');
                 })];
         });
