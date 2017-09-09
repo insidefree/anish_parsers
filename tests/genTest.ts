@@ -13,27 +13,36 @@ const BASE_URL = 'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=
 
 
 async function* foo(pageCount) {
-    // yield "wait..."
-    // await new Promise(r => setTimeout(r, 1000))
-    // yield new Promise(r => setTimeout(() => r('okay!'), 1000))
-    // ***
-   
-    let page = 1
-    while (page < pageCount) {
-        console.log(`start get ${page}`)
-        driver.get(BASE_URL + page)
-        console.log('start getData')
-        await getData()
-            .then(await getElements)
-        console.log('end getData')
-        console.log('page++')
-        page++
+    let temp = 1
+    while (temp < pageCount) {
+        yield "wait..."
+        await new Promise(r => setTimeout(r, 1000))
+        yield new Promise(r => setTimeout(() => r('okay!'), 1000))
+        await new Promise(r => setTimeout(r, 2000))
+        yield "2000..."
+        yield new Promise(r => setTimeout(() => r('okay!'), 1000))
+        temp++
     }
-    driver.quit()
+
+    // ***
+
+    // let page = 1
+    // while (page < pageCount) {
+    //     console.log(`start get ${page}`)
+    //     driver.get(BASE_URL + page)
+    //     console.log('start getData')
+    //     await getData()
+    //         .then(await getElements)
+    //     console.log('end getData')
+    //     console.log('page++')
+    //     page++
+    // }
+    // driver.quit()
 }
 
 async function main() {
     for await (let item of foo(3)) {
+        console.log(item)
     }
 }
 

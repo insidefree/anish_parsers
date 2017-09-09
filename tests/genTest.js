@@ -63,29 +63,34 @@ var driver = new webdriver.Builder()
 var BASE_URL = 'http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=';
 function foo(pageCount) {
     return __asyncGenerator(this, arguments, function foo_1() {
-        var page, _a, _b;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var temp;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
                 case 0:
-                    page = 1;
-                    _c.label = 1;
+                    temp = 1;
+                    _a.label = 1;
                 case 1:
-                    if (!(page < pageCount)) return [3 /*break*/, 4];
-                    console.log("start get " + page);
-                    driver.get(BASE_URL + page);
-                    console.log('start getData');
-                    _b = (_a = getData()).then;
-                    return [4 /*yield*/, __await(getElements)];
-                case 2: return [4 /*yield*/, __await.apply(void 0, [_b.apply(_a, [_c.sent()])])];
+                    if (!(temp < pageCount)) return [3 /*break*/, 8];
+                    return [4 /*yield*/, "wait..."];
+                case 2:
+                    _a.sent();
+                    return [4 /*yield*/, __await(new Promise(function (r) { return setTimeout(r, 1000); }))];
                 case 3:
-                    _c.sent();
-                    console.log('end getData');
-                    console.log('page++');
-                    page++;
-                    return [3 /*break*/, 1];
+                    _a.sent();
+                    return [4 /*yield*/, new Promise(function (r) { return setTimeout(function () { return r('okay!'); }, 1000); })];
                 case 4:
-                    driver.quit();
-                    return [2 /*return*/];
+                    _a.sent();
+                    return [4 /*yield*/, __await(new Promise(function (r) { return setTimeout(r, 2000); }))];
+                case 5:
+                    _a.sent();
+                    return [4 /*yield*/, "2000..."];
+                case 6:
+                    _a.sent();
+                    return [4 /*yield*/, new Promise(function (r) { return setTimeout(function () { return r('okay!'); }, 1000); })];
+                case 7:
+                    _a.sent();
+                    return [3 /*break*/, 1];
+                case 8: return [2 /*return*/];
             }
         });
     });
@@ -105,6 +110,7 @@ function main() {
                     return [4 /*yield*/, _b.value];
                 case 3:
                     item = _d.sent();
+                    console.log(item);
                     _d.label = 4;
                 case 4: return [3 /*break*/, 1];
                 case 5: return [3 /*break*/, 12];

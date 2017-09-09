@@ -12,6 +12,10 @@ const driver = new webdriver.Builder()
     .forBrowser('chrome')
     .build();
 
+const path = require('path');
+const download = require('image-downloader')
+
+
 export default class SiteParserLetLive extends SiteParser {
     static getData
     static getElements
@@ -91,6 +95,22 @@ export default class SiteParserLetLive extends SiteParser {
                         let e3 = elem.findElement(By.css('img'))
                             .then(img => { return img.getAttribute('src') })
 
+                        elem.findElement(By.css('img'))
+                            .then(img => img.getAttribute('src')
+                                .then(img => {
+                                    download.image({
+                                        url: img,
+                                        dest: path.join('\downloadedImg')
+                                    })
+                                        .then(({ filename, image }) => {
+                                            console.log('File saved to', filename)
+                                        }).catch((err) => {
+                                            throw err
+                                        })
+                                })
+                            )
+  
+
                         promise.all([e1, e2, e3])
                             .then(values => {
                                 let obj: any = {}
@@ -99,15 +119,24 @@ export default class SiteParserLetLive extends SiteParser {
                                 obj.age = values[1]
                                 obj.images.push(values[2])
                                 console.log(obj)
+
                                 animalsRef.push(obj)
                             })
-
                     })
                     // let all_promises = []
                     // elements.map(elem => all_promises.push(this.handleElem(elem)))
                 })
                 .then(() => resolve())
         })
+    }
+
+    async downloadIMG(options) {
+        try {
+            const { filename, image } = await download.image(options)
+            console.log(filename) // => /path/to/dest/image.jpg  
+        } catch (e) {
+            throw e
+        }
     }
 
     handleError = (error) => {

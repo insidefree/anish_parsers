@@ -14,3 +14,6 @@ export const firebaseApp = firebase.initializeApp(config)
 export const animalsRef = firebase.database().ref('animals')
 
 export const animalsParser = firebase.database().ref('animalsParser')
+
+// Create a root reference
+export const storageRef = firebase.storage().ref()
