@@ -9,6 +9,8 @@ const config = {
     messagingSenderId: "613075498242"
 }
 
-export default firebase.initializeApp(config)
+export const firebaseApp = firebase.initializeApp(config)
 
-export const animals2 = firebase.database().ref('animals2')
+export const animalsRef = firebase.database().ref('animals')
+
+export const animalsParser = firebase.database().ref('animalsParser')
