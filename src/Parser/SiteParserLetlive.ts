@@ -1,6 +1,9 @@
 import SiteParser from './SiteParser'
 import { SiteParserInterface, CommonFuncTESTInterface } from './interfaces'
 
+// config
+import { animalsParser } from '../config/firebase'
+
 const webdriver = require('selenium-webdriver')
 const By = webdriver.By
 const promise = webdriver.promise
@@ -93,8 +96,9 @@ export default class SiteParserLetLive extends SiteParser {
                                 let obj: any = {}
                                 obj.name = values[0]
                                 obj.age = values[1]
-                                obj.image = values[2]
+                                obj.images.push(values[2])
                                 console.log(obj)
+                                animalsParser.push(obj)
                             })
 
                     })
