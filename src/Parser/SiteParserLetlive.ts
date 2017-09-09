@@ -2,7 +2,7 @@ import SiteParser from './SiteParser'
 import { SiteParserInterface, CommonFuncTESTInterface } from './interfaces'
 
 // config
-import { animalsParser } from '../config/firebase'
+import { animalsRef } from '../config/firebase'
 
 const webdriver = require('selenium-webdriver')
 const By = webdriver.By
@@ -42,26 +42,26 @@ export default class SiteParserLetLive extends SiteParser {
         })
     }
 
-    async handleElem(elem) {
-        return new Promise(resolve => {
-            let obj = {}
-            let e1 = elem.findElement(By.css('h3 a'))
-                .then(name => { return name.getText() })
-            let e2 = elem.findElement(By.css('.pet-details-age'))
-                .then(age => { return age.getText() })
-            let e3 = elem.findElement(By.css('img'))
-                .then(img => { return img.getAttribute('src') })
+    // async handleElem(elem) {
+    //     return new Promise(resolve => {
+    //         let obj = {}
+    //         let e1 = elem.findElement(By.css('h3 a'))
+    //             .then(name => { return name.getText() })
+    //         let e2 = elem.findElement(By.css('.pet-details-age'))
+    //             .then(age => { return age.getText() })
+    //         let e3 = elem.findElement(By.css('img'))
+    //             .then(img => { return img.getAttribute('src') })
 
-            promise.all([e1, e2, e3])
-                .then(values => {
-                    let obj: any = {}
-                    obj.name = values[0]
-                    obj.age = values[1]
-                    obj.image = values[2]
-                    resolve(() => console.log(obj))
-                })
-        })
-    }
+    //         promise.all([e1, e2, e3])
+    //             .then(values => {
+    //                 let obj: any = {}
+    //                 obj.name = values[0]
+    //                 obj.age = values[1]
+    //                 obj.image = values[2]
+    //                 resolve(() => console.log(obj))
+    //             })
+    //     })
+    // }
 
     async getElements() {
         return new Promise(resolve => {
@@ -94,11 +94,12 @@ export default class SiteParserLetLive extends SiteParser {
                         promise.all([e1, e2, e3])
                             .then(values => {
                                 let obj: any = {}
+                                obj.images = []
                                 obj.name = values[0]
                                 obj.age = values[1]
                                 obj.images.push(values[2])
                                 console.log(obj)
-                                animalsParser.push(obj)
+                                animalsRef.push(obj)
                             })
 
                     })
