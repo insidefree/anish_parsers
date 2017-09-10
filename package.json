@@ -15,6 +15,7 @@
   "dependencies": {
     "chromedriver": "^2.32.0",
     "core-js": "^2.5.1",
+    "delayed-request": "^1.0.0",
     "firebase": "^4.3.0",
     "image-downloader": "^3.2.2",
     "promise": "^8.0.1",
