@@ -12,9 +12,6 @@ const driver = new webdriver.Builder()
     .forBrowser('chrome')
     .build();
 
-const path = require('path');
-const download = require('image-downloader')
-
 
 export default class SiteParserLetLive extends SiteParser {
     static getData
@@ -94,22 +91,6 @@ export default class SiteParserLetLive extends SiteParser {
                             .then(age => { return age.getText() })
                         let e3 = elem.findElement(By.css('img'))
                             .then(img => { return img.getAttribute('src') })
-
-                        elem.findElement(By.css('img'))
-                            .then(img => img.getAttribute('src')
-                                .then(img => {
-                                    download.image({
-                                        url: img,
-                                        dest: path.join('\downloadedImg')
-                                    })
-                                        .then(({ filename, image }) => {
-                                            console.log('File saved to', filename)
-                                        }).catch((err) => {
-                                            throw err
-                                        })
-                                })
-                            )
-  
 
                         promise.all([e1, e2, e3])
                             .then(values => {
