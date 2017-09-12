@@ -12,6 +12,11 @@ const driver = new webdriver.Builder()
     .forBrowser('chrome')
     .build();
 
+var cloudscraper = require('cloudscraper')
+var Jimp = require("jimp")
+var storage = require('@google-cloud/storage');
+var serviceAccount = require('../config/fb_conf.json');
+
 
 export default class SiteParserLetLive extends SiteParser {
     static getData
@@ -22,7 +27,7 @@ export default class SiteParserLetLive extends SiteParser {
         super(siteName)
     }
 
-    async fetchData() {
+    async fetchData() {        
         let page = 1
         while (page < 3) {
             console.log(`start get ${page}`)
@@ -90,8 +95,10 @@ export default class SiteParserLetLive extends SiteParser {
                         let e2 = elem.findElement(By.css('.pet-details-age'))
                             .then(age => { return age.getText() })
                         let e3 = elem.findElement(By.css('img'))
-                            .then(img => { return img.getAttribute('src') })
-
+                            // .then(img => { return img.getAttribute('src') })
+                            .then(img => { return SiteParserLetLive.uploadFB(img.getAttribute('src')) })
+                            
+                        // let link = SiteParserLetLive.uploadFB(values[2]).then(r => console.log(r))
                         promise.all([e1, e2, e3])
                             .then(values => {
                                 let obj: any = {}
@@ -100,7 +107,7 @@ export default class SiteParserLetLive extends SiteParser {
                                 obj.age = values[1]
                                 obj.images.push(values[2])
                                 console.log(obj)
-
+                                
                                 animalsRef.push(obj)
                             })
                     })
@@ -111,13 +118,8 @@ export default class SiteParserLetLive extends SiteParser {
         })
     }
 
-    async downloadIMG(options) {
-        try {
-            const { filename, image } = await download.image(options)
-            console.log(filename) // => /path/to/dest/image.jpg  
-        } catch (e) {
-            throw e
-        }
+    downloadIMG = () => {
+        console.log('dw img')
     }
 
     handleError = (error) => {
@@ -128,5 +130,59 @@ export default class SiteParserLetLive extends SiteParser {
         let obj = { name: "", age: 13 }
         obj.name = val
         return obj
+    }
+
+    static async uploadFB(link) {
+        return new Promise(resolve => {
+            cloudscraper.request({
+                method: 'GET',
+                url: link,
+                encoding: null,
+            }, function (err, response, body) {
+                // console.log(response)
+                Jimp.read(body, function (err, image) {
+                    image.write(`../../tmp/img/${link}`, () => { console.log(err) });
+                })
+                resolve(link)
+            })
+        })
+
+        // const keyFilename="../anish_parser/src/config/fb_conf.json"; //replace this with api key file
+        // const projectId = "anish-6cd8e" //replace with your project id
+        // const bucketName = `${projectId}.appspot.com`;
+
+        // const mime = require('mime');
+        // const gcs = require('@google-cloud/storage')({
+        //     projectId,
+        //     keyFilename
+        // });
+
+        // const bucket = gcs.bucket(bucketName);
+
+        // const filePath = `./img/test.jpg`;
+        // const uploadTo = `images/test.jpg`;
+        // const fileMime = mime.lookup(filePath);
+
+        // bucket.upload(filePath, {
+        //     destination: uploadTo,
+        //     public: true,
+        //     metadata: { contentType: fileMime, cacheControl: "public, max-age=300" }
+        // }, function (err, file) {
+        //     if (err) {
+        //         console.log(err);
+        //         return;
+        //     }
+        //     console.log(createPublicFileURL(uploadTo));
+        // });
+
+        // function createPublicFileURL(storageName) {
+        //     return `http://storage.googleapis.com/${bucketName}/${encodeURIComponent(storageName)}`;
+
+        // }
+
+        // admin.initializeApp({
+        //   credential: admin.credential.cert(serviceAccount),
+        //   databaseURL: "https://anish-6cd8e.firebaseio.com"
+        // });
     }
 }
