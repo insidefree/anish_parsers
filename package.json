@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/storage": "^1.2.1",
     "chromedriver": "^2.32.0",
     "cloudscraper": "^1.4.1",
     "core-js": "^2.5.1",
