@@ -45,7 +45,7 @@ export default class SiteParserLetLive extends SiteParser {
 
     async fetchData() {
         let page = 1
-        while (page <= 19) {
+        while (page <= 3) {
             console.log(`start get ${page}`)
             driver.get('http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=' + page)
             console.log('start getData')
@@ -110,7 +110,9 @@ export default class SiteParserLetLive extends SiteParser {
                             .then(name => { return name.getText() })
                         let e2 = elem.findElement(By.css('.pet-details-age'))
                             .then(age => { return age.getText() })
-                        let e3 = elem.findElement(By.css('img'))
+                        let e3 = elem.findElement(By.css('.pet-execrpt'))
+                            .then(desc => {return desc.getText()})
+                        let e4 = elem.findElement(By.css('img'))
                             .then(img => img.getAttribute('src'))
                             .then(SiteParserLetLive.dwImage)
                             .then(SiteParserLetLive.upImage)
@@ -119,13 +121,14 @@ export default class SiteParserLetLive extends SiteParser {
                                     resolve(publicFileURL)
                                 })
                             })
-                        promise.all([e1, e2, e3])
+                        promise.all([e1, e2, e3, e4])
                             .then(values => {
                                 let obj: any = {}
                                 obj.images = []
                                 obj.name = values[0]
                                 obj.age = values[1]
-                                obj.images.push(values[2])
+                                obj.description = values[2]
+                                obj.images.push(values[3])
                                 console.log(obj)
                                 animalsRef.push(obj)
                             })
