@@ -45,7 +45,7 @@ export default class SiteParserLetLive extends SiteParser {
 
     async fetchData() {
         let page = 1
-        while (page < 3) {
+        while (page <= 19) {
             console.log(`start get ${page}`)
             driver.get('http://www.letlive.org.il/?post_type=pet&pet-cat=pc-dog&paged=' + page)
             console.log('start getData')
