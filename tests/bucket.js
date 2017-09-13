@@ -10,7 +10,7 @@ const gcs = require('@google-cloud/storage')({
 
 const bucket = gcs.bucket(bucketName);
 
-const filePath = `./img/test.jpg`;
+const filePath = `./tests/img/test.jpg`;
 const uploadTo = `images/test.jpg`;
 const fileMime = mime.lookup(filePath);
 

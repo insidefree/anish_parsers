@@ -12,10 +12,26 @@ const driver = new webdriver.Builder()
     .forBrowser('chrome')
     .build();
 
+// download image
 var cloudscraper = require('cloudscraper')
 var Jimp = require("jimp")
 var storage = require('@google-cloud/storage');
 var serviceAccount = require('../config/fb_conf.json');
+
+// upload image
+const keyFilename = "./src/config/fb_conf.json"; //replace this with api key file
+const projectId = "anish-6cd8e" //replace with your project id
+const bucketName = `${projectId}.appspot.com`;
+const mime = require('mime');
+const gcs = require('@google-cloud/storage')({
+    projectId,
+    keyFilename
+});
+const bucket = gcs.bucket(bucketName);
+const filePath = `./img/test.jpg`;
+const uploadTo = `images/test.jpg`;
+const fileMime = mime.lookup(filePath);
+
 
 
 export default class SiteParserLetLive extends SiteParser {
@@ -97,9 +113,10 @@ export default class SiteParserLetLive extends SiteParser {
                         let e3 = elem.findElement(By.css('img'))
                             .then(img => img.getAttribute('src'))
                             .then(SiteParserLetLive.dwImage)
-                            .then(msg => {
+                            .then(SiteParserLetLive.upImage)
+                            .then(publicFileURL => {
                                 return new Promise(resolve => {
-                                    resolve(msg)
+                                    resolve(publicFileURL)
                                 })
                             })
                         promise.all([e1, e2, e3])
@@ -136,7 +153,7 @@ export default class SiteParserLetLive extends SiteParser {
     }
 
     static dwImage(link) {
-        return new Promise((resolve, reject) => {
+        return new Promise(resolve => {
             cloudscraper.request({
                 method: 'GET',
                 url: link,
@@ -144,65 +161,29 @@ export default class SiteParserLetLive extends SiteParser {
             }, function (err, response, body) {
                 // console.log(response)
                 Jimp.read(body, function (err, image) {
-                    console.log('start write')
                     let name = link.split('/').pop()
-                    image.write(`./tests/img/${name}`, () => { resolve('done') })
+                    image.write(`./tmp/img/${name}`, () => { resolve(`./tmp/img/${name}`) })
                 })
             })
         })
     }
 
-    static uploadFB(link) {
-        cloudscraper.request({
-            method: 'GET',
-            url: link,
-            encoding: null,
-        }, (err, response, body) => {
-            console.log('**here')
-            Jimp.read(body, function (err, image) {
-                image.write(`../tmp/img/${link}`
-                    , () => { console.log('jimp err: ', err) });
-            })
-        })
-
+    static upImage(filePath) {
         return new Promise(resolve => {
-            resolve('img hase dw')
+            console.log(filePath)
+            let uploadTo = 'images/' + filePath.split('/').pop()
+            console.log(uploadTo)
+            bucket.upload(filePath, {
+                destination: uploadTo,
+                public: true,
+                metadata: { contentType: fileMime, cacheControl: "public, max-age=300" }
+            }, function (err, file) {
+                if (err) {
+                    console.log('uploadErr: ', err);
+                    return;
+                }
+                resolve(`http://storage.googleapis.com/${bucketName}/${encodeURIComponent(uploadTo)}`)
+            });
         })
-
-
-        // const keyFilename="../anish_parser/src/config/fb_conf.json"; //replace this with api key file
-        // const projectId = "anish-6cd8e" //replace with your project id
-        // const bucketName = `${projectId}.appspot.com`;
-
-        // const mime = require('mime');
-        // const gcs = require('@google-cloud/storage')({
-        //     projectId,
-        //     keyFilename
-        // });
-
-        // const bucket = gcs.bucket(bucketName);
-
-        // const filePath = `./img/test.jpg`;
-        // const uploadTo = `images/test.jpg`;
-        // const fileMime = mime.lookup(filePath);
-
-        // bucket.upload(filePath, {
-        //     destination: uploadTo,
-        //     public: true,
-        //     metadata: { contentType: fileMime, cacheControl: "public, max-age=300" }
-        // }, function (err, file) {
-        //     if (err) {
-        //         console.log(err);
-        //         return;
-        //     }
-        //     console.log(createPublicFileURL(uploadTo));
-        // });
-
-
-
-        // admin.initializeApp({
-        //   credential: admin.credential.cert(serviceAccount),
-        //   databaseURL: "https://anish-6cd8e.firebaseio.com"
-        // });
     }
 }
