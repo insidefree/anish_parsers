@@ -5,7 +5,7 @@ var storage = require('@google-cloud/storage');
 var admin = require("firebase-admin");
 var serviceAccount = require('../src/config/fb_conf.json');
 
-const keyFilename="../anish_parser/src/config/fb_conf.json"; //replace this with api key file
+const keyFilename = "../anish_parser/src/config/fb_conf.json"; //replace this with api key file
 const projectId = "anish-6cd8e" //replace with your project id
 const bucketName = `${projectId}.appspot.com`;
 
@@ -43,7 +43,21 @@ admin.initializeApp({
   databaseURL: "https://anish-6cd8e.firebaseio.com"
 });
 
-
+function wrap() {
+    return new Promise((resolve, reject) => {
+        cloudscraper.request({
+            method: 'GET',
+            url: 'http://www.letlive.org.il/wp-content/uploads/2017/04/mikel2-330x330.jpg',
+            encoding: null,
+        }, function (err, response, body) {
+            // console.log(response)
+            Jimp.read(body, function (err, image) {
+                console.log('start write')
+                image.write('./tests/img/test.jpg', () => { resolve('done') })
+            })
+        })
+    })
+}
 
 cloudscraper.request({
     method: 'GET',
@@ -52,7 +66,10 @@ cloudscraper.request({
 }, function (err, response, body) {
     console.log(response)
     Jimp.read(body, function (err, image) {
-        image.write( './tests/img/test.jpg', ()=> {console.log(err)} );
+        image.write('./tests/img/test.jpg', () => { console.log('error:', err) });
     })
-});
+})
 
+
+wrap()
+    .then(msg => console.log(msg))

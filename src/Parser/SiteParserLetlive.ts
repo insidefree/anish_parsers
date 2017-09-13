@@ -27,7 +27,7 @@ export default class SiteParserLetLive extends SiteParser {
         super(siteName)
     }
 
-    async fetchData() {        
+    async fetchData() {
         let page = 1
         while (page < 3) {
             console.log(`start get ${page}`)
@@ -95,10 +95,13 @@ export default class SiteParserLetLive extends SiteParser {
                         let e2 = elem.findElement(By.css('.pet-details-age'))
                             .then(age => { return age.getText() })
                         let e3 = elem.findElement(By.css('img'))
-                            // .then(img => { return img.getAttribute('src') })
-                            .then(img => { return SiteParserLetLive.uploadFB(img.getAttribute('src')) })
-                            
-                        // let link = SiteParserLetLive.uploadFB(values[2]).then(r => console.log(r))
+                            .then(img => img.getAttribute('src'))
+                            .then(SiteParserLetLive.dwImage)
+                            .then(msg => {
+                                return new Promise(resolve => {
+                                    resolve(msg)
+                                })
+                            })
                         promise.all([e1, e2, e3])
                             .then(values => {
                                 let obj: any = {}
@@ -107,7 +110,6 @@ export default class SiteParserLetLive extends SiteParser {
                                 obj.age = values[1]
                                 obj.images.push(values[2])
                                 console.log(obj)
-                                
                                 animalsRef.push(obj)
                             })
                     })
@@ -118,8 +120,9 @@ export default class SiteParserLetLive extends SiteParser {
         })
     }
 
-    downloadIMG = () => {
+    downloadIMG(link) {
         console.log('dw img')
+        return link
     }
 
     handleError = (error) => {
@@ -132,8 +135,8 @@ export default class SiteParserLetLive extends SiteParser {
         return obj
     }
 
-    static async uploadFB(link) {
-        return new Promise(resolve => {
+    static dwImage(link) {
+        return new Promise((resolve, reject) => {
             cloudscraper.request({
                 method: 'GET',
                 url: link,
@@ -141,11 +144,31 @@ export default class SiteParserLetLive extends SiteParser {
             }, function (err, response, body) {
                 // console.log(response)
                 Jimp.read(body, function (err, image) {
-                    image.write(`../../tmp/img/${link}`, () => { console.log(err) });
+                    console.log('start write')
+                    let name = link.split('/').pop()
+                    image.write(`./tests/img/${name}`, () => { resolve('done') })
                 })
-                resolve(link)
             })
         })
+    }
+
+    static uploadFB(link) {
+        cloudscraper.request({
+            method: 'GET',
+            url: link,
+            encoding: null,
+        }, (err, response, body) => {
+            console.log('**here')
+            Jimp.read(body, function (err, image) {
+                image.write(`../tmp/img/${link}`
+                    , () => { console.log('jimp err: ', err) });
+            })
+        })
+
+        return new Promise(resolve => {
+            resolve('img hase dw')
+        })
+
 
         // const keyFilename="../anish_parser/src/config/fb_conf.json"; //replace this with api key file
         // const projectId = "anish-6cd8e" //replace with your project id
@@ -175,10 +198,7 @@ export default class SiteParserLetLive extends SiteParser {
         //     console.log(createPublicFileURL(uploadTo));
         // });
 
-        // function createPublicFileURL(storageName) {
-        //     return `http://storage.googleapis.com/${bucketName}/${encodeURIComponent(storageName)}`;
 
-        // }
 
         // admin.initializeApp({
         //   credential: admin.credential.cert(serviceAccount),
