@@ -18,4 +18,5 @@ const wrapFunc01 = () => {
 }
 
 wrapFunc01()
-    .then(text => { console.log(text + ' was finished') })
+    .then(text => console.log(text + ' was finished'))
+    .then(() => console.log('continue what you want after calling async func'))
