@@ -5,13 +5,17 @@ const func01 = (val1, callback) => {
     }, 5000)
 }
 
-// func01('start funck01', val => console.log('Value from callback: ', val))
+// it's async basic call of func01
+// func01('start funck01', val => console.log('Value from callback: ', val)) 
 
+
+// it's wrapper using Promises for calling functions step by step
 const wrapFunc01 = () => {
+    let text = 'Start func01 inside Promise'
     return new Promise(resolve => {
-        func01('Start func01 inside Promise', resolve)
+        func01(text, resolve)
     })
 }
 
 wrapFunc01()
-    .then(() => { console.log('Finish') })
+    .then(text => { console.log(text + ' was finished') })
