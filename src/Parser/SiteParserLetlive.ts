@@ -105,11 +105,12 @@ export default class SiteParserLetLive extends SiteParser {
                         //     .then(img => img.getAttribute('src')
                         //         .then(img => console.log(img))
                         //     )
-                        let obj = {}
+                        //let obj = {}
                         let e1 = elem.findElement(By.css('h3 a'))
                             .then(name => { return name.getText() })
                         let e2 = elem.findElement(By.css('.pet-details-age'))
                             .then(age => { return age.getText() })
+                            .then()
                         let e3 = elem.findElement(By.css('.pet-execrpt'))
                             .then(desc => {return desc.getText()})
                         let e4 = elem.findElement(By.css('img'))
@@ -124,9 +125,11 @@ export default class SiteParserLetLive extends SiteParser {
                         promise.all([e1, e2, e3, e4])
                             .then(values => {
                                 let obj: any = {}
+                                obj.age = {}
                                 obj.images = []
                                 obj.name = values[0]
-                                obj.age = values[1]
+                                obj.age['str'] = values[1]
+                                obj.age['num'] = SiteParserLetLive.ageConverter(values[1])
                                 obj.description = values[2]
                                 obj.images.push(values[3])
                                 console.log(obj)
@@ -143,6 +146,10 @@ export default class SiteParserLetLive extends SiteParser {
     downloadIMG(link) {
         console.log('dw img')
         return link
+    }
+
+    static ageConverter(agestr) {
+        return agestr + 11111
     }
 
     handleError = (error) => {
