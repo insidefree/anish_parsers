@@ -121,16 +121,20 @@ export default class SiteParserLetLive extends SiteParser {
                                     resolve(publicFileURL)
                                 })
                             })
+                        var newRef = animalsRef.push().key
                         promise.all([e1, e2, e3, e4])
                             .then(values => {
                                 let obj: any = {}
+                                obj.age = {}
+                                obj.id = newRef
                                 obj.images = []
                                 obj.name = values[0]
-                                obj.age = values[1]
+                                obj.age.str = values[1]
+                                obj.age.num = values[1]
                                 obj.description = values[2]
                                 obj.images.push(values[3])
                                 console.log(obj)
-                                animalsRef.push(obj)
+                                animalsRef.child(newRef).set(obj)
                             })
                     })
                     // let all_promises = []
