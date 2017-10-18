@@ -129,7 +129,7 @@ export default class SiteParserLetLive extends SiteParser {
                                 obj.images = []
                                 obj.name = values[0]
                                 obj.age['str'] = values[1]
-                                obj.age['num'] = SiteParserLetLive.ageConverter(values[1])
+                                obj.age['num'] = SiteParserLetLive.translate(values[1])
                                 obj.description = values[2]
                                 obj.images.push(values[3])
                                 console.log(obj)
@@ -148,8 +148,42 @@ export default class SiteParserLetLive extends SiteParser {
         return link
     }
 
-    static ageConverter(agestr) {
-        return agestr + 11111
+    static dict = {
+        'אפס' : 0,
+        'אחת' : 1,
+        'שתיים'  : 2,
+        'שלושה' : 3,
+        'ארבעה' : 4,
+        'חמישה' : 5,
+        'שישה' : 6,
+        'שבעה' : 7,
+        'שמונה' : 8,
+        'תשעה' : 9,
+        'עשרה' : 10,
+        'אחד-עשר' : 11,
+        'שנים-עשר' : 12,
+        'שלוש-עשר' : 13,
+        'ארבעה-עשר' : 14,
+        'ארבע-עשר' : 14,
+        'חמישה-עשר' : 15,
+        'שישה-עשר' : 16,
+        'שבעה-עשר' : 17,
+        'שמונה-עשר' : 18,
+        'תשעה-עשר' : 19,
+        'עשרים' : 20,
+
+        'שנה' : 12,
+        'שנתיים' : 24,
+        'חודש' : 1,
+        'חודשיים' : 2
+    }
+
+    static translate(str){
+        let w = str.replace(/שנים|חודשים/, '').split('עד').map(function(w){
+            let k = w.trim();
+            return SiteParserLetLive.dict[k] != undefined ? SiteParserLetLive.dict[k] : (k * 12);
+        });
+    return w;
     }
 
     handleError = (error) => {
